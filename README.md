@@ -26,13 +26,13 @@ The Excel file contains three sheets:
 
 This folder contains FASTA files of protein sequences from organisms with known optimal growth temperatures (OGT). These sequences were randomly extracted from the genomes of organisms grouped by temperature category:
 
-| Folder | Temperature Range | Category |
-|--------|-------------------|----------|
-| `0-20/` | ≤ 20°C | Psychrophilic |
-| `20-30/` | 20–30°C | Psychrotrophic |
-| `40-60/` | 40–60°C | Thermophilic |
-| `60-80/` | 60–80°C | Thermophilic |
-| `80-100/` | 80–100°C | Hyperthermophilic |
+| Folder | Temperature Range |
+|--------|-------------------|
+| `0-20/` | ≤ 20°C |
+| `20-30/` | 20–30°C |
+| `40-60/` | 40–60°C |
+| `60-80/` | 60–80°C |
+| `80-100/` | 80–100°C |
 
 The OGT labels used in training were derived from these source organisms.
 
@@ -67,31 +67,32 @@ Extract ESM-1v embeddings from the 9,581 training sequences:
 
 ```bash
 python ESM-1v.py --input 9581 --output train_features.csv
-Step 2: Train the SVR Model
+```
+### Step 2: Train the SVR Model
 
 Train the SVR model using the extracted features and temperature labels:
-bash
+```bash
 
 python SVR.py --features train_features.csv --output svr_model.pkl
-
+```
 This generates the trained model file (svr_model.pkl) used for prediction.
-Step 3: Extract Features for Unknown Sequences
+### Step 3: Extract Features for Unknown Sequences
 
 For new sequences with unknown Topt values:
-bash
+```bash
 
 python ESM-1v.py --input unknown_sequences.fasta --output unknown_features.csv
-
-Step 4: Predict Topt
+```
+### Step 4: Predict Topt
 
 Predict Topt for unknown sequences using the trained model:
-bash
+```bash
 
 python predicted_temperatures.py \
   --model svr_model.pkl \
   --features unknown_features.csv \
   --output predictions.csv
-
+```
 The output file (predictions.csv) contains the predicted Topt values for each sequence.
 Data Source
 
